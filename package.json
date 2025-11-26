@@ -1,0 +1,36 @@
+{
+  "name": "portfoilo-backend",
+  "version": "1.0.0",
+  "description": "This is the Backend of the Portifolio",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Madhava-03/Portfoilo-Backend.git"
+  },
+  "author": "The Batman",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Madhava-03/Portfoilo-Backend/issues"
+  },
+  "homepage": "https://github.com/Madhava-03/Portfoilo-Backend#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "http-errors": "^2.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^9.0.0",
+    "morgan": "^1.10.1"
+  }
+  
+}
