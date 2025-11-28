@@ -1,0 +1,13 @@
+const globalErrorHandler = (err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "error";
+
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+    // // this is  useful for dev remove it in the prod
+    stack: err.stack,
+  });
+};
+
+export default globalErrorHandler;
