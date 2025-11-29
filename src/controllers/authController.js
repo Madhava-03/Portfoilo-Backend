@@ -50,6 +50,11 @@ export const signup = catchAsync(async (req, res, next) => {
     return next(new AppError("Name,Email and Password are Required", 400));
   }
 
+  const existuser = await User.findOne({ email });
+  if (existuser) {
+    return next(new AppError("User already exist with this Credentials"), 400);
+  }
+
   const user = await User.create({
     name,
     email,

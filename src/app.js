@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./Config/db.js";
 import AppError from "./utlis/appError.js";
 import authRouter from "./routes/authRoutes.js";
+import aboutRouter from "./routes/aboutRoutes.js";
 
 dotenv.config();
 
@@ -60,6 +61,7 @@ ROUTES
 */
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/about", aboutRouter);
 
 //global error handling
 app.use(globalErrorHandler);
