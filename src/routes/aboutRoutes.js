@@ -44,35 +44,65 @@ router.delete("/", protect, restrictTo("admin"), deleteAbout);
 
 // routes for adding specific schemas
 
-router.post("/skills", addSkill);
-router.post("/education", addEducation);
-router.post("/experience", addExperience);
-router.post("/projects", addProject);
-router.post("/achievements", addAchievement);
-router.post("/extracurriculars", addExtracurricular);
-router.post("/languages", addLanguage);
-router.post("/hobbies", addHobby);
+router.post("/skills", protect, restrictTo("admin"), addSkill);
+router.post("/education", protect, restrictTo("admin"), addEducation);
+router.post("/experience", protect, restrictTo("admin"), addExperience);
+router.post("/projects", protect, restrictTo("admin"), addProject);
+router.post("/achievements", protect, restrictTo("admin"), addAchievement);
+router.post(
+  "/extracurriculars",
+  protect,
+  restrictTo("admin"),
+  addExtracurricular
+);
+router.post("/languages", protect, restrictTo("admin"), addLanguage);
+router.post("/hobbies", protect, restrictTo("admin"), addHobby);
 
 // routes for updating specific tasks
 
-router.patch("/skills/:id", updateSkill);
-router.patch("/education/:id", updateEducation);
-router.patch("/experience/:id", updateExperience);
-router.patch("/projects/:id", updateProject);
-router.patch("/achievements/:id", updateAchievement);
-router.patch("/extracurriculars/:id", updateExtracurricular);
-router.patch("/languages/:id", updateLanguage);
-router.patch("/hobbies/:id", updateHobby);
+router.patch("/skills/:id", protect, restrictTo("admin"), updateSkill);
+router.patch("/education/:id", protect, restrictTo("admin"), updateEducation);
+router.patch("/experience/:id", protect, restrictTo("admin"), updateExperience);
+router.patch("/projects/:id", protect, restrictTo("admin"), updateProject);
+router.patch(
+  "/achievements/:id",
+  protect,
+  restrictTo("admin"),
+  updateAchievement
+);
+router.patch(
+  "/extracurriculars/:id",
+  protect,
+  restrictTo("admin"),
+  updateExtracurricular
+);
+router.patch("/languages/:id", protect, restrictTo("admin"), updateLanguage);
+router.patch("/hobbies/:id", protect, restrictTo("admin"), updateHobby);
 
 //routes for deleting subdocs/:id
 
-router.delete("/skills/:id", deleteSkill);
-router.delete("/education/:id", deleteEducation);
-router.delete("/experience/:id", deleteExperience);
-router.delete("/projects/:id", deleteProject);
-router.delete("/achievements/:id", deleteAchievement);
-router.delete("/extracurriculars/:id", deleteExtracurricular);
-router.delete("/languages/:id", deleteLanguage);
-router.delete("/hobbies/:id", deleteHobby);
+router.delete("/skills/:id", protect, restrictTo("admin"), deleteSkill);
+router.delete("/education/:id", protect, restrictTo("admin"), deleteEducation);
+router.delete(
+  "/experience/:id",
+  protect,
+  restrictTo("admin"),
+  deleteExperience
+);
+router.delete("/projects/:id", protect, restrictTo("admin"), deleteProject);
+router.delete(
+  "/achievements/:id",
+  protect,
+  restrictTo("admin"),
+  deleteAchievement
+);
+router.delete(
+  "/extracurriculars/:id",
+  protect,
+  restrictTo("admin"),
+  deleteExtracurricular
+);
+router.delete("/languages/:id", protect, restrictTo("admin"), deleteLanguage);
+router.delete("/hobbies/:id", protect, restrictTo("admin"), deleteHobby);
 
 export default router;

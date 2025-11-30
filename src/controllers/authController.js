@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import AppError from "../utlis/appError.js";
 import catchAsync from "../utlis/catchAsync.js";
+import crypto from "crypto";
 
 //creating the jwt Token
 
@@ -21,12 +22,9 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   };
-
-  if (process.env.NODE_ENV === "production") {
-    cookieOptions.secure = true; //now this will send the cookies on the HTTPS only
-  }
 
   res.cookie("jwt", token, cookieOptions);
 
@@ -51,6 +49,7 @@ export const signup = catchAsync(async (req, res, next) => {
   }
 
   const existuser = await User.findOne({ email });
+
   if (existuser) {
     return next(new AppError("User already exist with this Credentials"), 400);
   }
@@ -76,6 +75,10 @@ export const login = catchAsync(async (req, res, next) => {
   }
 
   const user = await User.findOne({ email }).select("+password");
+
+  if (!user.isActive) {
+    return next(new AppError("This user is deactivated!", 401));
+  }
   // console.log(req.body);
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError("Incorrect email or password", 401));
@@ -137,13 +140,80 @@ export const restrictTo = (...roles) => {
 //loggingOUT
 
 export const logout = (req, res) => {
-  res.cookie("jwt", "loggedout", {
+  res.clearCookie("jwt", {
+    expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
-    expires: new Date(Date.now() + 10 * 1000), //jwt will be updated to loggedout and will be expired in 10 sec
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
   });
-
   res.status(200).json({
     status: "sucess",
     message: "Sucessfully Logged Out",
   });
 };
+
+//forgot password
+
+export const forgotPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new AppError("User with this mail does not exist", 404));
+  }
+
+  const resetToken = user.createPasswordResetToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  const resetURL = `${process.env.PASSWORD_RESET_URL}/${resetToken}`;
+
+  console.log(resetURL); // we are accessign this from console now wil later automate via the email
+
+  res.status(200).json({
+    status: "success",
+    message: "password token sent to gmail",
+  });
+});
+
+//reset the password now birooooooo
+
+export const resetPassword = catchAsync(async (req, res, next) => {
+  const token = req.params.token;
+
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  const user = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetTokenExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new AppError("Token is expired please try again", 400));
+  }
+
+  user.password = req.body.password;
+  user.passwordResetToken = undefined;
+  user.passwordResetTokenExpires = undefined;
+  user.passwordChangedAt = Date.now();
+
+  await user.save({ validateBeforeSave: false }); //changes wont be done until we do this
+
+  // login automatically after password reset
+
+  createSendToken(user, 200, res);
+});
+
+// Deleting The User
+
+export const deleteMe = catchAsync(async (req, res, next) => {
+  //this user id is coming for protect middlware
+  await User.findOneAndUpdate(req.user._id, { isActive: false });
+
+  res.status(204).json({
+    status: "success",
+    message: "Account Deleted Successfully bro",
+    data: null,
+  });
+});
