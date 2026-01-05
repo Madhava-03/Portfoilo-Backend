@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
 
   email: {
     type: String,
-    required: [true, "User reuires Email"],
+    required: [true, "User requires Email"],
     unique: true,
     lowercase: true,
   },
@@ -44,21 +44,18 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+
   loginCount: {
     type: Number,
     default: 0,
   },
-  googleId: { type: String },
-  provider: { type: String },
+
+  googleId: { type: String, select: false },
+  provider: { type: String, select: false },
   lastLoginAt: Date,
 });
 
 //Hooks
-
-userSchema.pre("save", function () {
-  if (!this.isModified("password") || this.isNew) return;
-  this.passwordChangedAt = Date.now() - 1000;
-});
 
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
@@ -67,6 +64,11 @@ userSchema.pre("save", async function () {
 });
 
 // Set passwordChangedAt when user updates password
+
+userSchema.pre("save", async function () {
+  if (!this.isModified("password") || this.isNew) return;
+  this.passwordChangedAt = Date.now() - 1000;
+});
 
 //utility function for auth
 

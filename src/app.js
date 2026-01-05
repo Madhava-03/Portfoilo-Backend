@@ -8,10 +8,10 @@ import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 import { connectDB } from "./Config/db.js";
-import AppError from "./utlis/appError.js";
 import authRouter from "./routes/authRoutes.js";
 import oauth2Router from "./routes/oauth2Routes.js";
 import aboutRouter from "./routes/aboutRoutes.js";
+import blogRouter from "./routes/blogRoutes.js";
 
 dotenv.config();
 
@@ -33,6 +33,7 @@ app.use(
 );
 
 const __dirname = path.resolve();
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.json({ limit: "10kb" }));
@@ -68,6 +69,7 @@ ROUTES
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/auth/", oauth2Router);
 app.use("/api/v1/about", aboutRouter);
+app.use("/api/v1/blogs", blogRouter);
 app.use("api/v1", oauth2Router);
 
 //global error handling
