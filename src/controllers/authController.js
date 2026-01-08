@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
-import AppError from "../utlis/appError.js";
-import catchAsync from "../utlis/catchAsync.js";
+import AppError from "../utilis/appError.js";
+import catchAsync from "../utilis/catchAsync.js";
 import crypto from "crypto";
 
 //creating the jwt Token

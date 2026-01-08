@@ -1,8 +1,8 @@
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
-import AppError from "../utlis/appError.js";
-import catchAsync from "../utlis/catchAsync.js";
+import AppError from "../utilis/appError.js";
+import catchAsync from "../utilis/catchAsync.js";
 
 // this function will take you to the google auth websitre ang get back with the code which will be later used to exahnce with tokens
 export const googleAuth = catchAsync(async (req, res, next) => {

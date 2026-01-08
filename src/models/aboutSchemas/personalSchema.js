@@ -67,11 +67,11 @@ const personalSchema = new mongoose.Schema({
   },
 
   socials: {
-    github: { type: String, default: "" },
-    linkedin: { type: String, default: "" },
-    instagram: { type: String, default: "" },
-    twitter: { type: String, default: "" },
-    portfolio: { type: String, default: "" },
+    Github: { type: String, default: "" },
+    Linkedin: { type: String, default: "" },
+    Instagram: { type: String, default: "" },
+    Twitter: { type: String, default: "" },
+    Portfolio: { type: String, default: "" },
   },
 });
 

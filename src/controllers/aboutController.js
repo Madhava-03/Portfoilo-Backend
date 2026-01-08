@@ -1,6 +1,6 @@
 import About from "../models/aboutModel.js";
-import catchAsync from "../utlis/catchAsync.js";
-import AppError from "../utlis/appError.js";
+import catchAsync from "../utilis/catchAsync.js";
+import AppError from "../utilis/appError.js";
 
 export const getAbout = catchAsync(async (req, res, next) => {
   const about = await About.findOne();

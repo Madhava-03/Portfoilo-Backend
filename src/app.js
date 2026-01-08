@@ -1,4 +1,5 @@
 import express from "express";
+import dotenv from "dotenv";
 import path from "path";
 import globalErrorHandler from "./middlewares/errorMiddleware.js";
 import morgan from "morgan";
@@ -6,14 +7,19 @@ import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
-import dotenv from "dotenv";
+
 import { connectDB } from "./Config/db.js";
 import authRouter from "./routes/authRoutes.js";
 import oauth2Router from "./routes/oauth2Routes.js";
 import aboutRouter from "./routes/aboutRoutes.js";
 import blogRouter from "./routes/blogRoutes.js";
+import socialProfileRouter from "./routes/socialProfileRoutes.js";
+import contentRouter from "./routes/contentRoutes.js";
+import commentRouter from "./routes/commentsRouter.js";
 
-dotenv.config();
+dotenv.config({
+  path: path.resolve(process.cwd(), ".env"),
+});
 
 const app = express();
 
@@ -70,7 +76,9 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/auth/", oauth2Router);
 app.use("/api/v1/about", aboutRouter);
 app.use("/api/v1/blogs", blogRouter);
-app.use("api/v1", oauth2Router);
+app.use("/api/v1/profile", socialProfileRouter);
+app.use("/api/v1/content", contentRouter);
+app.use("/api/v1/comments", commentRouter);
 
 //global error handling
 app.use(globalErrorHandler);
